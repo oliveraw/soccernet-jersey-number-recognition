@@ -1,0 +1,12 @@
+using python 3.10.12
+pip install -r requirements.txt
+
+self annotations can be made on roboflow
+
+interactive job: 
+salloc --account=eecs545w24_class --partition=gpu --gpus=1 --mem-per-gpu=8000 --cpus-per-gpu=3 --time=4:00:00
+
+run using python run.py or scripts/run_inference.sh
+
+mean: [127.4395, 135.9471,  84.0932]
+std: [38.5333, 38.7357, 47.5903]
