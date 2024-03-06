@@ -45,7 +45,7 @@ transforms = transforms.Compose([
     transforms.Normalize((127.4395, 135.9471,  84.0932), (38.5333, 38.7357, 47.5903))
 ])
 
-model = ResNet50(num_classes=101).to(device)
+model = ResNet18(num_classes=101).to(device)
 summary(model, (3, 128, 64))
 
 # data
