@@ -28,11 +28,11 @@ class soccernet_dataset(Dataset):
         frame_names = [f for f in os.listdir(vid_dir) if not f.startswith(".")]
         frame_names = sorted(frame_names, key=lambda x: int(x.split('.')[0].split('_')[1]))
         frame_paths = [os.path.join(vid_dir, frame_name) for frame_name in frame_names]
-        frames = []
-        for frame_path in frame_paths:
-            frame = read_image(frame_path)
-            frames.append(frame)
-        return frames, frame_paths, self.gt[vid_name]
+        # frames = []
+        # for frame_path in frame_paths:
+            # frame = read_image(frame_path)
+            # frames.append(frame)
+        return frame_paths, self.gt[vid_name]
 
 
 # images will not be in order
