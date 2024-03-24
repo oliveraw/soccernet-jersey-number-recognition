@@ -34,8 +34,12 @@
 import json
 import os
 import collections
+import argparse
 
-data_dir = "soccernet-annotated"
+parser = argparse.ArgumentParser(description='EECS 545 SoccerNet Jersey Number Recognition')
+parser.add_argument('--data_root', default='./soccernet-annotated', type=str, help='path to dataset, the dir with (test, train, valid) directories')
+args = parser.parse_args()
+
 splits = ['train', 'test', 'valid']
 ann_file = '_annotations.coco.json'
 out_file = '_mmocr_annotations.json'
@@ -57,7 +61,7 @@ def coco_to_mmocr_ann(category_id_to_name, ann):
     )
 
 for split in splits:
-    ann_path = os.path.join(data_dir, split, ann_file)
+    ann_path = os.path.join(args.data_root, split, ann_file)
     with open(ann_path) as f:
         ann_dict = json.load(f)
         annotations = ann_dict['annotations']   # list of {'id': 0, 'image_id': 0, 'category_id': 6, 'bbox': [18, 24, 17.11, 19.17], 'area': 327.999, 'segmentation': [], 'iscrowd': 0}
@@ -93,7 +97,7 @@ for split in splits:
             data_list=full_data_list
         )
         # print(json.dumps(out_dict, indent=4))
-        out_path = os.path.join(data_dir, split, out_file)
+        out_path = os.path.join(args.data_root, split, out_file)
         with open(out_path, 'w') as f:
             json.dump(out_dict, f)
         print(f"Writing {split} mmocr annotations to {out_path}")
