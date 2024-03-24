@@ -14,10 +14,6 @@ import numpy as np
 from soccernet_dataset import soccernet_dataset, soccernet_dataset_flat, generate_all_file_names
 
 parser = argparse.ArgumentParser(description='EECS 545 SoccerNet Jersey Number Recognition')
-parser.add_argument('--batch_size', default=64, type=int, help='train batchsize') 
-parser.add_argument('--lr', '--learning_rate', default=0.001, type=float, help='initial learning rate')
-parser.add_argument('--num_epochs', default=300, type=int)
-parser.add_argument('--eval_interval', default=100, type=int)
 parser.add_argument('--seed', default=123)
 parser.add_argument('--det_threshold', default=0.6, type=float)
 parser.add_argument('--data_path', default='./data', type=str, help='path to dataset, the dir with (train, test, challenge) directories')
@@ -47,7 +43,7 @@ logger.info(f"Num videos in test dataset: {len(test_dataset)}")
 infer = MMOCRInferencer(det=args.det_config_path, det_weights=args.det_weights_path, rec='SAR', device=device)
 
 correct = []
-for (frame_paths, gt) in train_dataset:
+for video_idx, (frame_paths, gt) in enumerate(train_dataset):
     # output of inferencer is in this format: https://mmocr.readthedocs.io/en/dev-1.x/user_guides/inference.html#output
 
     result = infer(frame_paths, out_dir=args.output_dir, save_vis=False, return_vis=True)
@@ -76,7 +72,9 @@ for (frame_paths, gt) in train_dataset:
 
     predictions = np.array(predictions)
     final_prediction = scipy.stats.mode(predictions, axis=None, keepdims=False)[0]
-    print("Prediction:", final_prediction, "Correct?:", final_prediction == gt)
+    if np.isnan(final_prediction):
+        final_prediction = -1
+    print("Video:", video_idx, "Prediction:", final_prediction, "Ground truth:", gt, "Correct?:", final_prediction == gt, predictions)
     correct.append(final_prediction == gt)
 
 print(f"Final Accuracy: {count(correct)}/{len(correct)} = {count(correct) / len(correct)}")

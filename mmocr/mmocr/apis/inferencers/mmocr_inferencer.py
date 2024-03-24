@@ -172,7 +172,7 @@ class MMOCRInferencer(BaseMMOCRInferencer):
                     for i, crop in enumerate(self.rec_inputs):
                         if crop.shape[0] == 0 or crop.shape[1] == 0:
                             self.rec_inputs[i] = np.zeros((1, 1, 3))
-                            print("replaced empty det prediction with zero image")
+                            # print("replaced empty det prediction with zero image")
 
                     result['rec'].append(
                         self.textrec_inferencer(
