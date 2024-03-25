@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 import cv2
 import scipy
 import numpy as np
+import os
 
 from soccernet_dataset import soccernet_dataset, soccernet_dataset_flat, generate_all_file_names
 
@@ -23,9 +24,11 @@ parser.add_argument('--det_weights_path', default='mmocr/soccernet-dbnetpp/epoch
 args = parser.parse_args()
 
 # toggle between INFO, DEBUG
-logging.basicConfig(format='%(asctime)s %(message)s')
+logfile = f"logs/soccernet-{os.getenv('SLURM_JOB_ID')}-info.log"
+logging.basicConfig(filename=logfile,
+    format='%(asctime)s %(message)s', 
+    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 logger.info(args)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -45,6 +48,9 @@ infer = MMOCRInferencer(det=args.det_config_path, det_weights=args.det_weights_p
 correct = []
 for video_idx, (frame_paths, gt) in enumerate(train_dataset):
     # output of inferencer is in this format: https://mmocr.readthedocs.io/en/dev-1.x/user_guides/inference.html#output
+
+    # for debugging to skip most frames
+    # frame_paths = [frame_paths[0]]
 
     result = infer(frame_paths, out_dir=args.output_dir, save_vis=False, return_vis=True)
     predictions = []

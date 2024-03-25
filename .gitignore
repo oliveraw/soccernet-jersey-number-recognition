@@ -10,6 +10,7 @@ job_scripts
 gs*
 outputs
 soccernet-annotated
+logs/
 
 
 # Byte-compiled / optimized / DLL files
