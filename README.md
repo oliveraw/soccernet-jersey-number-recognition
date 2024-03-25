@@ -56,6 +56,10 @@ This was running very slowly for me on cpu--it is much faster to request a gpu a
 salloc --account=eecs545w24_class --partition=gpu --gpus=1 --mem-per-gpu=8000 --cpus-per-gpu=3 --time=2:00:00
 python run.py
 ```
+Or requesting a gpu through a batch script:
+```bash
+sbatch scripts/run.sh
+```
 
 ## Finetuning
 To perform our own finetuning, we need to generate annotations in the correct format. Use the script `generate_annotation_file.py` to create these. You only need to do this one time.
