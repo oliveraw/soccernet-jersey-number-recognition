@@ -74,7 +74,7 @@ for video_idx, (frame_paths, gt) in enumerate(train_dataset):
     final_prediction = scipy.stats.mode(predictions, axis=None, keepdims=False)[0]
     if np.isnan(final_prediction):
         final_prediction = -1
-    print("Video:", video_idx, "Prediction:", final_prediction, "Ground truth:", gt, "Correct?:", final_prediction == gt, predictions)
+    logger.info(f"Video: {video_idx}, Prediction: {final_prediction}, Ground truth: {gt} Correct?: {final_prediction == gt}, {predictions}")
     correct.append(final_prediction == gt)
 
-print(f"Final Accuracy: {count(correct)}/{len(correct)} = {count(correct) / len(correct)}")
+logger.info(f"Final Accuracy: {count(correct)}/{len(correct)} = {count(correct) / len(correct)}")
