@@ -65,7 +65,7 @@ sbatch scripts/run.sh
 To perform our own finetuning, we need to generate annotations in the correct format. Use the script `generate_annotation_file.py` to create these. You only need to do this one time.
 ```bash
 pwd
-  > /home/oliveraw/SoccerNet
+> /home/oliveraw/SoccerNet
 python generate_annotation_file.py --data_root soccernet-annotated
 ```
 This will generate 3 new files: `soccernet-annotated/test/_mmocr_annotations.json`, `soccernet-annotated/train/_mmocr_annotations.json`, and `soccernet-annotated/valid/_mmocr_annotations.json`.
