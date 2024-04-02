@@ -11,22 +11,22 @@ model = dict(
         mean=[123.675, 116.28, 103.53],
         std=[58.395, 57.12, 57.375]))
 
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=3, val_interval=3)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=10, val_interval=2)
 
 # dataset settings
 train_list = [_base_.soccernet_textrecog_train]
 test_list = [_base_.soccernet_textrecog_test]
 val_list = test_list
 
-# val_evaluator = dict(
-#     dataset_prefixes=['CUTE80', 'IIIT5K', 'SVT', 'SVTP', 'IC13', 'IC15'])
-# test_evaluator = val_evaluator
+val_evaluator = dict(dataset_prefixes=['Soccernet'])
+test_evaluator = val_evaluator
 
 train_dataloader = dict(
     batch_size=64,
     num_workers=2,
     persistent_workers=True,
     pin_memory=True,
+    drop_last=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
         type='ConcatDataset',
@@ -38,7 +38,7 @@ val_dataloader = dict(
     num_workers=2,
     persistent_workers=True,
     pin_memory=True,
-    drop_last=False,
+    drop_last=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type='ConcatDataset',
@@ -50,7 +50,7 @@ test_dataloader = dict(
     num_workers=2,
     persistent_workers=True,
     pin_memory=True,
-    drop_last=False,
+    drop_last=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type='ConcatDataset',
