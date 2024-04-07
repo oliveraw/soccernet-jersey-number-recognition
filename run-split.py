@@ -102,10 +102,12 @@ for video_idx, (frame_paths, gt) in enumerate(test_dataset):
         if text.isnumeric():
             if len(str(text)) > 2:
                 predictions.append(int(str(text)[-2:]))
-            predictions.append(int(text))
+            else:
+                predictions.append(int(text))
             
     predictions = np.array(predictions)
-    
+    if np.isnan(final_prediction):
+        final_prediction = -1
     final_prediction = scipy.stats.mode(predictions, axis=None, keepdims=False)[0]
 
     logger.info(f"Video: {video_idx}, Prediction: {final_prediction}, Ground truth: {gt} Correct?: {final_prediction == gt}, {predictions}")
