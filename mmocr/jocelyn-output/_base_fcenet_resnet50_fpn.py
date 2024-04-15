@@ -33,8 +33,6 @@ model = dict(
             score_thr=0.3)),
     data_preprocessor=dict(
         type='TextDetDataPreprocessor',
-        # mean=[123.675, 116.28, 103.53],
-        # std=[58.395, 57.12, 57.375],
         mean=[127.4395, 135.9471,  84.0932],
         std=[38.5333, 38.7357, 47.5903],
         bgr_to_rgb=True,
@@ -50,7 +48,7 @@ train_pipeline = [
     ),
     dict(
         type='RandomResize',
-        scale=(800, 800),
+        scale=(800, 800), #(640, 640)
         ratio_range=(0.75, 2.5),
         keep_ratio=True),
     dict(
