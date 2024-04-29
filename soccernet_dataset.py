@@ -2,13 +2,13 @@ import os
 import json
 import torch
 from torch.utils.data import Dataset, DataLoader
-from torchvision.io import read_image
+from PIL import Image
 
 # the index gives the video--e.g. idx 1 = video 1 (num_frames x H x W x 3)
 class soccernet_dataset(Dataset):
     def __init__(self, root_dir, mode):
         self.vid_dir = os.path.join(root_dir, mode, "images")           # data/train/images
-        vid_names = [f for f in os.listdir(self.vid_dir) if not f.startswith(".")]
+        vid_names = [f for f in os.listdir(self.vid_dir) if not f.startswith(".") and not f.endswith(".json")]
         self.vid_names = sorted(vid_names, key=lambda x: int(x))        # [0, 1, 2, ...]
 
         gt_file = os.path.join(root_dir, mode, f"{mode}_gt.json")
@@ -33,6 +33,9 @@ class soccernet_dataset(Dataset):
             # frame = read_image(frame_path)
             # frames.append(frame)
         return frame_paths, self.gt[vid_name]
+
+    def get_dataset_dir(self):
+        return self.vid_dir
 
 
 # images will not be in order
@@ -79,15 +82,12 @@ class soccernet_dataset_flat(Dataset):
         return len(self.frame_paths)
 
     def __getitem__(self, idx):
-        frame = read_image(self.frame_paths[idx]).float()
+        frame = Image.open(self.frame_paths[idx])
 
         if self.transform:
             frame = self.transform(frame)
         
-        if self.gt[idx] == -1:
-            return frame, 100
-        else:
-            return frame, self.gt[idx]
+        return frame, self.gt[idx], self.frame_paths[idx]
 
 
 # generate_all_file_names('./data/train/images', './data/train/frames.txt')

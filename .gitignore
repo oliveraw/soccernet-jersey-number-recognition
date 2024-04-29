@@ -12,6 +12,10 @@ outputs
 soccernet-annotated
 logs/
 
+*.jpg
+*.jpeg
+*.png
+*.pth
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
