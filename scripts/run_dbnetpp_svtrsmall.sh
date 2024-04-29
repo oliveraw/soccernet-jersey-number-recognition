@@ -16,4 +16,6 @@
 #SBATCH --output=./logs/%x-%j.log
 
 # The application(s) to execute along with its input arguments and options:
-time python run_jocelyn.py --det_threshold 0.6 --rec_threshold 0.0
+time python run_jocelyn.py \
+    --det_config_path mmocr/configs/textdet/dbnetpp/dbnetpp_resnet50-dcnv2_fpnc_soccernetannotated_gen.py \
+    --det_weights_path mmocr/soccernet-dbnetpp-genL/epoch_3.pth

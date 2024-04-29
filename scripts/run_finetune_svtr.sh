@@ -3,7 +3,7 @@
 
 #“#SBATCH” directives that convey submission options:
 
-#SBATCH --job-name=soccernet
+#SBATCH --job-name=soccernet-finetune-svtr
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=2
@@ -16,4 +16,6 @@
 #SBATCH --output=./logs/%x-%j.log
 
 # The application(s) to execute along with its input arguments and options:
-time python run_jocelyn.py --det_threshold 0.6 --rec_threshold 0.0
+cd mmocr
+time python tools/train.py configs/textrecog/svtr/svtr-base_20e_soccernet_gen.py --work-dir soccernet-svtr-genL-combined
+cd ..

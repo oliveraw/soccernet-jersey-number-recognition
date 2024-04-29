@@ -1,4 +1,4 @@
-# https://mmocr.readthedocs.io/en/dev-1.x/basic_concepts/transforms.html
+# https://mmocr.readthedocs.io/en/dev-1.x/basic_concepts/datasets.html
 
 soccernet_textdet_train = dict(
     type='OCRDataset',

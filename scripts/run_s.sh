@@ -3,12 +3,12 @@
 
 #“#SBATCH” directives that convey submission options:
 
-#SBATCH --job-name=soccernet
+#SBATCH --job-name=soccernet-gen-finetuned-dbnetpp30e-svtr20e
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=2
-#SBATCH --time=7:59:55
-#SBATCH --account=eecs545w24_class
+#SBATCH --time=20:00:00
+#SBATCH --account=stellayu0
 #SBATCH --partition=gpu
 #SBATCH --gpus=1
 #SBATCH --mem-per-gpu=16000m 

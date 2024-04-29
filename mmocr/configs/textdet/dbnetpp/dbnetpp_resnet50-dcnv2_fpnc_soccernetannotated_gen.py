@@ -1,15 +1,19 @@
 _base_ = [
     '_base_dbnetpp_resnet50-dcnv2_fpnc.py',         # model architecture
-    '../_base_/datasets/soccernet.py',              # get our custom dataset
+    '../_base_/datasets/soccernet-gen.py',              # get our custom dataset
     '../_base_/default_runtime.py',                 # default configurations for eval, logging  
-    '../_base_/schedules/schedule_adam_600e.py',     # get the optimizer + num epochs
+    '../_base_/schedules/schedule_adam_600e.py',     # get the optimizer
 ]
 
 load_from = 'https://download.openmmlab.com/mmocr/textdet/dbnetpp/dbnetpp_resnet50-dcnv2_fpnc_1200e_icdar2015/dbnetpp_resnet50-dcnv2_fpnc_1200e_icdar2015_20220829_230108-f289bd20.pth'
 
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=30, val_interval=5)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=10, val_interval=5)
+default_hooks = dict(
+    checkpoint=dict(interval=5, type='CheckpointHook')
+)
 
-auto_scale_lr = dict(base_batch_size=8)
+BATCH_SIZE = 8
+auto_scale_lr = dict(base_batch_size=BATCH_SIZE)
 
 model = dict(
     data_preprocessor=dict(
@@ -22,9 +26,9 @@ model = dict(
 )
 
 # dataset settings
-train_list = [_base_.soccernet_textdet_train]
-val_list = [_base_.soccernet_textdet_val]
-test_list = [_base_.soccernet_textdet_test]
+train_list = [_base_.soccernet_gen_textdet_train]
+val_list = [_base_.soccernet_gen_textdet_val]
+test_list = [_base_.soccernet_gen_textdet_test]
 
 train_pipeline = [
     dict(type='LoadImageFromFile', color_type='color_ignore_orientation'),
@@ -68,7 +72,7 @@ test_pipeline = [
 ]
 
 train_dataloader = dict(
-    batch_size=8,
+    batch_size=BATCH_SIZE,
     num_workers=2,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
@@ -78,7 +82,7 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 
 val_dataloader = dict(
-    batch_size=8,
+    batch_size=BATCH_SIZE,
     num_workers=2,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
@@ -88,7 +92,7 @@ val_dataloader = dict(
         pipeline=test_pipeline))
 
 test_dataloader = dict(
-    batch_size=8,
+    batch_size=BATCH_SIZE,
     num_workers=2,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
