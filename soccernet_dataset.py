@@ -33,9 +33,12 @@ class soccernet_dataset(Dataset):
             # frame = read_image(frame_path)
             # frames.append(frame)
         return frame_paths, self.gt[vid_name]
+<<<<<<< HEAD
 
     def get_dataset_dir(self):
         return self.vid_dir
+=======
+>>>>>>> b11a05adc516705c385bfdfd9080020049f79c4a
 
 
 # images will not be in order

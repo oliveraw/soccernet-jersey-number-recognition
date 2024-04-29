@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # https://mmocr.readthedocs.io/en/dev-1.x/basic_concepts/datasets.html
+=======
+# https://mmocr.readthedocs.io/en/dev-1.x/basic_concepts/transforms.html
+>>>>>>> b11a05adc516705c385bfdfd9080020049f79c4a
 
 soccernet_textdet_train = dict(
     type='OCRDataset',

@@ -2,11 +2,16 @@ _base_ = [
     '_base_dbnetpp_resnet50-dcnv2_fpnc.py',         # model architecture
     '../_base_/datasets/soccernet.py',              # get our custom dataset
     '../_base_/default_runtime.py',                 # default configurations for eval, logging  
+<<<<<<< HEAD
     '../_base_/schedules/schedule_adam_600e.py',     # get the optimizer + num epochs
+=======
+    '../_base_/schedules/schedule_adam_10e.py',     # get the optimizer + num epochs
+>>>>>>> b11a05adc516705c385bfdfd9080020049f79c4a
 ]
 
 load_from = 'https://download.openmmlab.com/mmocr/textdet/dbnetpp/dbnetpp_resnet50-dcnv2_fpnc_1200e_icdar2015/dbnetpp_resnet50-dcnv2_fpnc_1200e_icdar2015_20220829_230108-f289bd20.pth'
 
+<<<<<<< HEAD
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=30, val_interval=5)
 
 auto_scale_lr = dict(base_batch_size=8)
@@ -21,6 +26,8 @@ model = dict(
     )
 )
 
+=======
+>>>>>>> b11a05adc516705c385bfdfd9080020049f79c4a
 # dataset settings
 train_list = [_base_.soccernet_textdet_train]
 val_list = [_base_.soccernet_textdet_val]
@@ -97,6 +104,18 @@ test_dataloader = dict(
         datasets=test_list,
         pipeline=test_pipeline))
 
+<<<<<<< HEAD
+=======
+auto_scale_lr = dict(base_batch_size=8)
+
+_base_.model.data_preprocessor=dict(
+    type='TextDetDataPreprocessor',
+    mean=[127.4395, 135.9471,  84.0932],
+    std=[38.5333, 38.7357, 47.5903],
+    bgr_to_rgb=True,
+    pad_size_divisor=32)
+
+>>>>>>> b11a05adc516705c385bfdfd9080020049f79c4a
 # visualization = _base_.default_hooks.visualization
 # visualization.update(
 #     dict(enable=True, show=True, draw_gt=False, draw_pred=True))

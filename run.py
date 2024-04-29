@@ -59,10 +59,17 @@ logger.info(f"Num videos in test dataset: {len(test_dataset)}")
 #     rec_weights=args.rec_weights_path,
 #     device=device)
 
+<<<<<<< HEAD
 infer = MMOCRInferencer(det=args.det_config_path,
     det_weights=args.det_weights_path,
     rec="svtr-small",
     device=device)
+=======
+# infer = MMOCRInferencer(det=args.det_config_path,
+#     det_weights=args.det_weights_path,
+#     rec="svtr-small",
+#     device=device)
+>>>>>>> b11a05adc516705c385bfdfd9080020049f79c4a
 
 correct = []
 for video_idx, (frame_paths, gt) in enumerate(test_dataset):
@@ -75,6 +82,7 @@ for video_idx, (frame_paths, gt) in enumerate(test_dataset):
     HALF_CROP_SIZE = 10      # take crop from center of each image
     max_shape = 0
     all_pixels = []
+<<<<<<< HEAD
     last_image = None
     for path in frame_paths:
         img = cv2.imread(path)
@@ -131,3 +139,95 @@ for video_idx, (frame_paths, gt) in enumerate(test_dataset):
         logger.debug(pred)
 
 logger.info(f"Final Accuracy: {sum(correct)}/{len(correct)} = {sum(correct) / len(correct)}")
+=======
+    for path in frame_paths:
+        img = cv2.imread(path)
+        max_shape = max(max_shape, img.shape[0])
+        max_shape = max(max_shape, img.shape[1])
+
+        # taking center crop
+        c_h, c_w = img.shape[0] // 2, img.shape[1] // 2
+        crop = img[c_h-HALF_CROP_SIZE : c_h+HALF_CROP_SIZE, c_w-HALF_CROP_SIZE:c_w+HALF_CROP_SIZE]
+
+        crop_rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB) 
+        pixels = crop_rgb.reshape(-1, 3)
+        all_pixels.append(pixels)
+
+        # https://stackoverflow.com/questions/12182891/plot-image-color-histogram-using-matplotlib
+        # color = ('b', 'g', 'r')
+        # for i,col in enumerate(color_record.keys()):
+        #     histr = cv2.calcHist([img],[i],None,[256],[0,256])
+        #     color_record[col] += histr
+    
+    # print([x.shape for x in all_pixels])
+    all_pixels = np.concatenate(all_pixels, axis=0)
+    all_colors = np.array(['#%02x%02x%02x' % tuple(rgb) for rgb in all_pixels])
+    # choose = np.random.choice(all_pixels.shape[0], 100000, replace=False)
+    # all_pixels = all_pixels[choose, :]
+    # all_colors = all_colors[choose]
+    print(all_pixels.shape, all_colors.shape)
+
+    kmeans = KMeans(n_clusters=3, random_state=0, n_init="auto").fit(all_pixels)
+    cluster_centers = kmeans.cluster_centers_.astype(int)
+    cluster_colors = np.array(['#%02x%02x%02x' % tuple(rgb) for rgb in cluster_centers])
+    print("centers", cluster_centers)
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(121, projection='3d')
+    ax2 = fig.add_subplot(122, projection='3d')
+    ax1.scatter(all_pixels[:, 0], all_pixels[:, 1], all_pixels[:, 2], c=all_colors)
+    ax2.scatter(cluster_centers[:, 0], cluster_centers[:, 1], cluster_centers[:, 2], c=cluster_colors)
+    print("saving color histogram", f"colors/center_crop_{path.split('/')[-1]}")
+    os.makedirs("colors", exist_ok=True)
+    plt.savefig(f"colors/center_crop_{path.split('/')[-1]}")
+    plt.close()
+    
+#     if max_shape < 50:
+#         final_prediction = -1
+#         logger.info(f"Video: {video_idx}, soccer ball shortcut prediction")
+#     else:
+#         # det_result = det(frame_paths, out_dir=args.output_dir, save_vis=False, return_vis=True)
+#         # rec_result = rec(frame_paths, out_dir=args.output_dir, save_vis=False, return_vis=True)
+#         # print(det_result['predictions'][0])
+#         # assert False
+
+#         result = infer(frame_paths, out_dir=args.output_dir, save_vis=False, return_vis=True)
+
+#         predictions = []
+#         for idx, pred in enumerate(result['predictions']):
+#             det_scores = pred['det_scores']
+#             rec_scores = pred['rec_scores']
+#             rec_texts = pred['rec_texts']
+#             # print(idx, det_scores, rec_texts)
+#             predictions.extend(list(zip(det_scores, rec_scores, rec_texts)))
+
+#             # save the images which were over the detection threshold
+#             if args.save_vis:
+#                 over_threshold = len(det_scores) != 0 and any(i >= args.det_threshold for i in det_scores)
+#                 if over_threshold:
+#                     filename = frame_paths[idx].split('/')[-1]
+#                     plt.figure()
+#                     plt.title(det_scores)
+#                     plt.imshow(result['visualization'][0])
+#                     plt.savefig(f"{args.output_dir}/soccernet-{os.getenv('SLURM_JOB_ID')}/vis/{filename}")
+#                     logger.debug(f"Saving figure {filename}")
+
+#         confident_numbers = []
+#         # filter non numeric predictions, take only predictions with det confidence above threshold
+#         for i, (det_score, rec_score, rec_text) in enumerate(predictions):
+#             if det_score > args.det_threshold and rec_score > args.rec_threshold and rec_text.isnumeric():
+#                 confident_numbers.append(int(rec_text))
+
+#         confident_numbers = np.array(confident_numbers)
+#         final_prediction = scipy.stats.mode(confident_numbers, axis=None, keepdims=False)[0]
+#         if np.isnan(final_prediction):
+#             final_prediction = -1
+
+#     correct.append(final_prediction == gt)
+
+#     logger.info(f"Video: {video_idx}, Prediction: {final_prediction}, Ground truth: {gt} Correct?: {final_prediction == gt}")
+#     for pred in predictions:
+#         logger.debug(pred)
+
+# logger.info(f"Final Accuracy: {sum(correct)}/{len(correct)} = {sum(correct) / len(correct)}")
+>>>>>>> b11a05adc516705c385bfdfd9080020049f79c4a
